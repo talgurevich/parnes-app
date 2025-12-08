@@ -67,7 +67,9 @@ export default function NewProjectPage() {
       if (!user) throw new Error('Not authenticated')
 
       // Upload file to storage
-      const filePath = `${user.id}/${Date.now()}-${file.name}`
+      // Use timestamp + random string for filename (avoid Hebrew characters in path)
+      const safeFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.xlsx`
+      const filePath = `${user.id}/${safeFileName}`
       const { error: uploadError } = await supabase.storage
         .from('excel-files')
         .upload(filePath, file)
