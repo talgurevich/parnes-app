@@ -86,7 +86,7 @@ export default async function ProjectPage({ params }: { params: { id: string } }
           <div className="bg-gradient-to-r from-primary to-primary-light rounded-2xl p-8 text-center">
             <h2 className="text-4xl font-bold mb-2">{String(businessInfo.name || project.name)}</h2>
             <p className="text-xl opacity-90">{String(businessInfo.concept || 'תוכנית עסקית')}</p>
-            {businessInfo.location && (
+            {Boolean(businessInfo.location) && (
               <p className="mt-4 bg-white/20 inline-block px-4 py-2 rounded-full">
                 {String(businessInfo.location)}
               </p>
