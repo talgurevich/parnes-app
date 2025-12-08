@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
+import { ShareButton } from '@/components/dashboard/ShareButton'
 import { KeyMetrics } from '@/components/infographic/KeyMetrics'
 import { InvestmentChart } from '@/components/infographic/InvestmentChart'
 import { PricingTable } from '@/components/infographic/PricingTable'
@@ -51,7 +52,7 @@ export default async function ProjectPage({ params }: { params: { id: string } }
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <Link href="/dashboard" className="text-gray-400 hover:text-white text-sm mb-2 inline-block">
             ← חזרה לפרויקטים
@@ -61,6 +62,9 @@ export default async function ProjectPage({ params }: { params: { id: string } }
             <p className="text-gray-400 mt-1">{project.description}</p>
           )}
         </div>
+        {project.status === 'ready' && (
+          <ShareButton projectId={project.id} publicSlug={project.public_slug} />
+        )}
       </div>
 
       {project.status !== 'ready' ? (
