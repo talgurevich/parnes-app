@@ -1,6 +1,12 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+// Allowed email addresses
+const ALLOWED_EMAILS = [
+  'parnes2@gmail.com',
+  'tal.gurevich@gmail.com',
+]
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
@@ -15,6 +21,12 @@ export async function GET(request: Request) {
       const { data: { user } } = await supabase.auth.getUser()
 
       if (user) {
+        // Check if email is allowed
+        if (!ALLOWED_EMAILS.includes(user.email || '')) {
+          await supabase.auth.signOut()
+          return NextResponse.redirect(`${origin}/login?error=unauthorized`)
+        }
+
         const { data: profile } = await supabase
           .from('profiles')
           .select()

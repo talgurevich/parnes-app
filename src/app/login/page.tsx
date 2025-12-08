@@ -1,11 +1,23 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error')
+    if (errorParam === 'unauthorized') {
+      setError('הגישה מוגבלת למשתמשים מורשים בלבד')
+    } else if (errorParam === 'auth') {
+      setError('אירעה שגיאה בהתחברות. נסה שנית.')
+    }
+  }, [searchParams])
 
   const handleGoogleLogin = async () => {
     setLoading(true)
@@ -27,6 +39,12 @@ export default function LoginPage() {
         <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-8 shadow-xl">
           <h1 className="text-3xl font-bold text-center mb-2">ברוכים הבאים</h1>
           <p className="text-gray-400 text-center mb-8">התחבר כדי לנהל את התוכניות העסקיות שלך</p>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-center">
+              {error}
+            </div>
+          )}
 
           <button
             onClick={handleGoogleLogin}
