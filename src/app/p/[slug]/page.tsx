@@ -110,8 +110,15 @@ export default async function PublicProjectPage({ params }: { params: { slug: st
         <SignificantParams params={significantParams as { name: string; value: number; note?: string; color: string }[]} />
 
         {/* Footer */}
-        <div className="text-center py-8 opacity-50 text-sm">
-          נוצר באמצעות Parnes
+        <div className="text-center py-8 border-t border-white/10 mt-8">
+          <a
+            href="https://www.errn.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-gray-400 hover:text-white transition-colors text-sm"
+          >
+            Built by <span className="text-primary">errn.io</span>
+          </a>
         </div>
       </div>
     </div>
