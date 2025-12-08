@@ -17,12 +17,11 @@ export default async function ProjectPage({ params }: { params: { id: string } }
 
   if (!user) redirect('/login')
 
-  // Fetch project
+  // Fetch project (shared between authorized users)
   const { data: project } = await supabase
     .from('projects')
     .select('*')
     .eq('id', id)
-    .eq('user_id', user.id)
     .single()
 
   if (!project) notFound()

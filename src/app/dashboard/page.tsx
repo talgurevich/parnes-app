@@ -6,10 +6,10 @@ export default async function DashboardPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Show all projects (shared between authorized users)
   const { data: projects } = await supabase
     .from('projects')
     .select('*')
-    .eq('user_id', user?.id)
     .order('created_at', { ascending: false })
 
   return (
