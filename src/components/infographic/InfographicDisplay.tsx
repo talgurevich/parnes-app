@@ -53,13 +53,13 @@ export function InfographicDisplay({
       <div className="space-y-8">
         {/* Business Header */}
         <div
-          className="rounded-2xl p-8 text-center relative overflow-hidden"
+          className="rounded-2xl p-8 text-center relative"
           style={{
             background: `linear-gradient(135deg, ${colors.primary} 0%, ${primaryVariants.light} 100%)`,
           }}
         >
           {showColorPicker && (
-            <div className="absolute top-4 left-4">
+            <div className="absolute top-4 left-4 z-50">
               <ColorPalettePicker
                 projectId={projectId}
                 initialColors={colors}
