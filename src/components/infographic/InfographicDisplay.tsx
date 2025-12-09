@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ColorPaletteId, COLOR_PALETTES, DEFAULT_PALETTE_ID } from '@/types'
+import { CustomColors, DEFAULT_COLORS, generateColorVariants } from '@/types'
 import { PaletteProvider } from './PaletteProvider'
 import { ColorPalettePicker } from '@/components/dashboard/ColorPalettePicker'
 import { KeyMetrics } from './KeyMetrics'
@@ -16,7 +16,7 @@ import { GrowthChart } from './GrowthChart'
 interface InfographicDisplayProps {
   projectId: string
   projectName: string
-  initialPalette: ColorPaletteId | null
+  initialColors: CustomColors
   businessInfo: Record<string, unknown>
   pricing: Record<string, unknown>
   expenses: Record<string, unknown>
@@ -26,13 +26,13 @@ interface InfographicDisplayProps {
   year1: Record<string, unknown>
   year2: Record<string, unknown>
   monthlyData: unknown[]
-  showPalettePicker?: boolean
+  showColorPicker?: boolean
 }
 
 export function InfographicDisplay({
   projectId,
   projectName,
-  initialPalette,
+  initialColors,
   businessInfo,
   pricing,
   expenses,
@@ -42,30 +42,28 @@ export function InfographicDisplay({
   year1,
   year2,
   monthlyData,
-  showPalettePicker = true,
+  showColorPicker = true,
 }: InfographicDisplayProps) {
-  const [currentPalette, setCurrentPalette] = useState<ColorPaletteId>(
-    initialPalette || DEFAULT_PALETTE_ID
-  )
+  const [colors, setColors] = useState<CustomColors>(initialColors)
 
-  const palette = COLOR_PALETTES[currentPalette]
+  const primaryVariants = generateColorVariants(colors.primary)
 
   return (
-    <PaletteProvider paletteId={currentPalette}>
+    <PaletteProvider colors={colors}>
       <div className="space-y-8">
         {/* Business Header */}
         <div
           className="rounded-2xl p-8 text-center relative overflow-hidden"
           style={{
-            background: `linear-gradient(135deg, ${palette.primary} 0%, ${palette.primaryLight} 100%)`,
+            background: `linear-gradient(135deg, ${colors.primary} 0%, ${primaryVariants.light} 100%)`,
           }}
         >
-          {showPalettePicker && (
+          {showColorPicker && (
             <div className="absolute top-4 left-4">
               <ColorPalettePicker
                 projectId={projectId}
-                currentPalette={currentPalette}
-                onPaletteChange={setCurrentPalette}
+                initialColors={colors}
+                onColorsChange={setColors}
               />
             </div>
           )}
@@ -132,7 +130,7 @@ export function InfographicDisplay({
             rel="noopener noreferrer"
             className="text-gray-400 hover:text-white transition-colors text-sm"
           >
-            Built by <span style={{ color: palette.primary }}>errn.io</span>
+            Built by <span style={{ color: colors.primary }}>errn.io</span>
           </a>
         </div>
       </div>

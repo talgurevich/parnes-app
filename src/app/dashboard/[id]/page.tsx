@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ShareButton } from '@/components/dashboard/ShareButton'
 import { InfographicDisplay } from '@/components/infographic/InfographicDisplay'
-import { ColorPaletteId } from '@/types'
+import { DEFAULT_COLORS } from '@/types'
 
 export default async function ProjectPage({ params }: { params: { id: string } }) {
   const { id } = await params
@@ -81,7 +81,10 @@ export default async function ProjectPage({ params }: { params: { id: string } }
         <InfographicDisplay
           projectId={project.id}
           projectName={project.name}
-          initialPalette={project.color_palette as ColorPaletteId | null}
+          initialColors={{
+            primary: project.color_primary || DEFAULT_COLORS.primary,
+            secondary: project.color_secondary || DEFAULT_COLORS.secondary,
+          }}
           businessInfo={businessInfo}
           pricing={pricing}
           expenses={expenses}
@@ -91,7 +94,7 @@ export default async function ProjectPage({ params }: { params: { id: string } }
           year1={year1}
           year2={year2}
           monthlyData={monthlyData}
-          showPalettePicker={true}
+          showColorPicker={true}
         />
       )}
     </div>

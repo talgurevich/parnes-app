@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { notFound } from 'next/navigation'
 import { InfographicDisplay } from '@/components/infographic/InfographicDisplay'
-import { ColorPaletteId } from '@/types'
+import { DEFAULT_COLORS } from '@/types'
 
 // Public page - use service role to bypass RLS
 const supabase = createClient(
@@ -49,7 +49,10 @@ export default async function PublicProjectPage({ params }: { params: { slug: st
         <InfographicDisplay
           projectId={project.id}
           projectName={project.name}
-          initialPalette={project.color_palette as ColorPaletteId | null}
+          initialColors={{
+            primary: project.color_primary || DEFAULT_COLORS.primary,
+            secondary: project.color_secondary || DEFAULT_COLORS.secondary,
+          }}
           businessInfo={businessInfo}
           pricing={pricing}
           expenses={expenses}
@@ -59,7 +62,7 @@ export default async function PublicProjectPage({ params }: { params: { slug: st
           year1={year1}
           year2={year2}
           monthlyData={monthlyData}
-          showPalettePicker={false}
+          showColorPicker={false}
         />
       </div>
     </div>

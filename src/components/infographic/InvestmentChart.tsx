@@ -27,7 +27,7 @@ export function InvestmentChart({
     datasets: [
       {
         data: [equipment, additional, contingency, renovation],
-        backgroundColor: [palette.primary, palette.backgroundLight, '#f39c12', palette.secondary],
+        backgroundColor: [palette.primary, palette.primaryDark, '#f39c12', palette.secondary],
         borderWidth: 0,
       },
     ],
@@ -49,7 +49,7 @@ export function InvestmentChart({
 
   const items = [
     { name: 'ציוד מקצועי', amount: equipment, color: palette.primary },
-    { name: 'הוצאות נוספות', amount: additional, color: palette.backgroundLight },
+    { name: 'הוצאות נוספות', amount: additional, color: palette.primaryDark },
     { name: 'שיפוץ ובינוי', amount: renovation, color: palette.secondary },
     { name: 'בלתי מתוכנן', amount: contingency, color: '#f39c12' },
   ]

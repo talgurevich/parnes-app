@@ -1,40 +1,48 @@
 'use client'
 
 import { createContext, useContext, ReactNode } from 'react'
-import { ColorPalette, COLOR_PALETTES, ColorPaletteId, DEFAULT_PALETTE_ID } from '@/types'
+import { CustomColors, DEFAULT_COLORS, generateColorVariants } from '@/types'
 
-const PaletteContext = createContext<ColorPalette>(COLOR_PALETTES[DEFAULT_PALETTE_ID])
+export interface PaletteColors {
+  primary: string
+  primaryLight: string
+  primaryDark: string
+  secondary: string
+  secondaryLight: string
+  secondaryDark: string
+}
+
+function generatePalette(colors: CustomColors): PaletteColors {
+  const primary = generateColorVariants(colors.primary)
+  const secondary = generateColorVariants(colors.secondary)
+
+  return {
+    primary: primary.base,
+    primaryLight: primary.light,
+    primaryDark: primary.dark,
+    secondary: secondary.base,
+    secondaryLight: secondary.light,
+    secondaryDark: secondary.dark,
+  }
+}
+
+const PaletteContext = createContext<PaletteColors>(generatePalette(DEFAULT_COLORS))
 
 export function usePalette() {
   return useContext(PaletteContext)
 }
 
 interface PaletteProviderProps {
-  paletteId: ColorPaletteId | null
+  colors: CustomColors
   children: ReactNode
 }
 
-export function PaletteProvider({ paletteId, children }: PaletteProviderProps) {
-  const palette = COLOR_PALETTES[paletteId || DEFAULT_PALETTE_ID]
+export function PaletteProvider({ colors, children }: PaletteProviderProps) {
+  const palette = generatePalette(colors)
 
   return (
     <PaletteContext.Provider value={palette}>
-      <div
-        style={{
-          '--palette-primary': palette.primary,
-          '--palette-primary-light': palette.primaryLight,
-          '--palette-primary-dark': palette.primaryDark,
-          '--palette-secondary': palette.secondary,
-          '--palette-secondary-light': palette.secondaryLight,
-          '--palette-secondary-dark': palette.secondaryDark,
-          '--palette-background': palette.background,
-          '--palette-background-light': palette.backgroundLight,
-          '--palette-background-dark': palette.backgroundDark,
-        } as React.CSSProperties}
-        className="palette-container"
-      >
-        {children}
-      </div>
+      {children}
     </PaletteContext.Provider>
   )
 }

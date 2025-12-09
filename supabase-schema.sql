@@ -22,14 +22,17 @@ CREATE TABLE IF NOT EXISTS projects (
   file_path TEXT NOT NULL,
   original_filename TEXT,
   status TEXT DEFAULT 'processing' CHECK (status IN ('processing', 'ready', 'error')),
-  color_palette TEXT DEFAULT 'rose-teal' CHECK (color_palette IN ('rose-teal', 'ocean-blue', 'sunset-orange', 'forest-green', 'purple-gold', 'monochrome')),
+  color_primary TEXT DEFAULT '#e94560',
+  color_secondary TEXT DEFAULT '#4ecdc4',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Migration: Add color_palette column to existing projects table
+-- Migration: Add custom color columns to existing projects table
 -- Run this if the table already exists:
--- ALTER TABLE projects ADD COLUMN IF NOT EXISTS color_palette TEXT DEFAULT 'rose-teal' CHECK (color_palette IN ('rose-teal', 'ocean-blue', 'sunset-orange', 'forest-green', 'purple-gold', 'monochrome'));
+-- ALTER TABLE projects DROP COLUMN IF EXISTS color_palette;
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS color_primary TEXT DEFAULT '#e94560';
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS color_secondary TEXT DEFAULT '#4ecdc4';
 
 -- Project data (parsed Excel data stored as JSON)
 CREATE TABLE IF NOT EXISTS project_data (
