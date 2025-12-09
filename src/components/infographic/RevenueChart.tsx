@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { usePalette } from './PaletteProvider'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -18,6 +19,7 @@ interface RevenueChartProps {
 }
 
 export function RevenueChart({ monthlyData }: RevenueChartProps) {
+  const palette = usePalette()
   const defaultSubscription = [17936, 20110, 22284, 27342, 29772, 32203, 34633, 37064, 38886, 40709, 42532, 44355]
   const defaultPersonal = [2772, 3696, 4620, 5544, 6468, 7392, 8316, 9240, 10164, 11088, 12012, 12936]
 
@@ -35,13 +37,13 @@ export function RevenueChart({ monthlyData }: RevenueChartProps) {
       {
         label: 'הכנסות מסלולים',
         data: subscription,
-        backgroundColor: '#4ecdc4',
+        backgroundColor: palette.secondary,
         borderRadius: 5,
       },
       {
         label: 'הכנסות אישיים',
         data: personal,
-        backgroundColor: '#e94560',
+        backgroundColor: palette.primary,
         borderRadius: 5,
       },
     ],

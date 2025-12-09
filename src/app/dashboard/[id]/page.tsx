@@ -2,14 +2,8 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ShareButton } from '@/components/dashboard/ShareButton'
-import { KeyMetrics } from '@/components/infographic/KeyMetrics'
-import { InvestmentChart } from '@/components/infographic/InvestmentChart'
-import { PricingTable } from '@/components/infographic/PricingTable'
-import { ExpensesList } from '@/components/infographic/ExpensesList'
-import { YearProjections } from '@/components/infographic/YearProjections'
-import { SignificantParams } from '@/components/infographic/SignificantParams'
-import { RevenueChart } from '@/components/infographic/RevenueChart'
-import { GrowthChart } from '@/components/infographic/GrowthChart'
+import { InfographicDisplay } from '@/components/infographic/InfographicDisplay'
+import { ColorPaletteId } from '@/types'
 
 export default async function ProjectPage({ params }: { params: { id: string } }) {
   const { id } = await params
@@ -84,76 +78,21 @@ export default async function ProjectPage({ params }: { params: { id: string } }
           )}
         </div>
       ) : (
-        <>
-          {/* Business Header */}
-          <div className="bg-gradient-to-r from-primary to-primary-light rounded-2xl p-8 text-center">
-            <h2 className="text-4xl font-bold mb-2">{String(businessInfo.name || project.name)}</h2>
-            <p className="text-xl opacity-90">{String(businessInfo.concept || 'תוכנית עסקית')}</p>
-            {Boolean(businessInfo.location) && (
-              <p className="mt-4 bg-white/20 inline-block px-4 py-2 rounded-full">
-                {String(businessInfo.location)}
-              </p>
-            )}
-          </div>
-
-          {/* Key Metrics */}
-          <KeyMetrics
-            totalInvestment={Number(investments.total) || 236500}
-            spaceGross={Number(businessInfo.spaceGross) || 90}
-            maxCapacity={58}
-            monthsToBreakeven={Number(kpis.breakEvenMonths) || 12}
-            roiYears={Number(kpis.roiYears) || 2.52}
-            averagePrice={Number(pricing.averagePrice) || 607}
-          />
-
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Investment Chart */}
-            <InvestmentChart
-              equipment={Number(investments.equipment) || 110000}
-              additional={Number(investments.additional) || 71500}
-              contingency={Number(investments.contingency) || 30000}
-              renovation={Number(investments.renovation) || 25000}
-            />
-
-            {/* Pricing Table */}
-            <PricingTable
-              plans={Array.isArray(pricing.plans) ? pricing.plans : []}
-              personalTraining={Number(pricing.personalTraining) || 220}
-              clinicTreatment={Number(pricing.clinicTreatment) || 350}
-            />
-
-            {/* Expenses */}
-            <ExpensesList expenses={expenses as Record<string, number>} />
-
-            {/* Growth Chart */}
-            <GrowthChart monthlyData={monthlyData as { month: number; customers: number }[]} />
-          </div>
-
-          {/* Year Projections */}
-          <YearProjections
-            year1={year1 as Record<string, number>}
-            year2={year2 as Record<string, number>}
-            kpis={kpis as Record<string, number>}
-          />
-
-          {/* Revenue Chart */}
-          <RevenueChart monthlyData={monthlyData as { month: number; revenueSubscription: number; revenuePersonal: number }[]} />
-
-          {/* Significant Parameters */}
-          <SignificantParams params={significantParams as { name: string; value: number; note?: string; color: string }[]} />
-
-          {/* Footer */}
-          <div className="text-center py-8 border-t border-white/10 mt-8">
-            <a
-              href="https://www.errn.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors text-sm"
-            >
-              Built by <span className="text-primary">errn.io</span>
-            </a>
-          </div>
-        </>
+        <InfographicDisplay
+          projectId={project.id}
+          projectName={project.name}
+          initialPalette={project.color_palette as ColorPaletteId | null}
+          businessInfo={businessInfo}
+          pricing={pricing}
+          expenses={expenses}
+          investments={investments}
+          kpis={kpis}
+          significantParams={significantParams}
+          year1={year1}
+          year2={year2}
+          monthlyData={monthlyData}
+          showPalettePicker={true}
+        />
       )}
     </div>
   )

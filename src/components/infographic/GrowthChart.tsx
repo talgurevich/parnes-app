@@ -12,6 +12,7 @@ import {
   Legend,
   Filler,
 } from 'chart.js'
+import { usePalette } from './PaletteProvider'
 
 ChartJS.register(
   CategoryScale,
@@ -29,10 +30,19 @@ interface GrowthChartProps {
 }
 
 export function GrowthChart({ monthlyData }: GrowthChartProps) {
+  const palette = usePalette()
   const defaultData = [33, 37, 41, 45, 49, 53, 57, 61, 64, 67, 70, 73]
   const customers = monthlyData.length > 0
     ? monthlyData.map((d) => d.customers)
     : defaultData
+
+  // Convert hex to rgba for background
+  const hexToRgba = (hex: string, alpha: number) => {
+    const r = parseInt(hex.slice(1, 3), 16)
+    const g = parseInt(hex.slice(3, 5), 16)
+    const b = parseInt(hex.slice(5, 7), 16)
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`
+  }
 
   const data = {
     labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
@@ -40,11 +50,11 @@ export function GrowthChart({ monthlyData }: GrowthChartProps) {
       {
         label: 'לקוחות במסלול',
         data: customers,
-        borderColor: '#e94560',
-        backgroundColor: 'rgba(233, 69, 96, 0.1)',
+        borderColor: palette.primary,
+        backgroundColor: hexToRgba(palette.primary, 0.1),
         fill: true,
         tension: 0.4,
-        pointBackgroundColor: '#e94560',
+        pointBackgroundColor: palette.primary,
         pointRadius: 5,
       },
     ],

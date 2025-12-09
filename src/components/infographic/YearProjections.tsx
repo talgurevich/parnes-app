@@ -1,3 +1,7 @@
+'use client'
+
+import { usePalette } from './PaletteProvider'
+
 interface YearProjectionsProps {
   year1: Record<string, number>
   year2: Record<string, number>
@@ -5,6 +9,7 @@ interface YearProjectionsProps {
 }
 
 export function YearProjections({ year1, year2, kpis }: YearProjectionsProps) {
+  const palette = usePalette()
   const years = [
     {
       title: 'שנה ראשונה',
@@ -41,6 +46,17 @@ export function YearProjections({ year1, year2, kpis }: YearProjectionsProps) {
     return `${prefix}₪${Math.abs(value).toLocaleString()}`
   }
 
+  const getValueColor = (type: string) => {
+    switch (type) {
+      case 'positive':
+        return '#92D050' // success green - keep consistent
+      case 'negative':
+        return '#FF0000' // danger red - keep consistent
+      default:
+        return palette.secondary
+    }
+  }
+
   return (
     <div className="bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 p-6">
       <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
@@ -49,7 +65,7 @@ export function YearProjections({ year1, year2, kpis }: YearProjectionsProps) {
       <div className="grid md:grid-cols-3 gap-6">
         {years.map((year, index) => (
           <div key={index} className="bg-white/5 rounded-xl p-5">
-            <h4 className="text-lg font-semibold text-primary mb-4 text-center">
+            <h4 className="text-lg font-semibold mb-4 text-center" style={{ color: palette.primary }}>
               {year.title}
             </h4>
             <div className="space-y-3">
@@ -59,15 +75,7 @@ export function YearProjections({ year1, year2, kpis }: YearProjectionsProps) {
                   className="flex justify-between py-2 border-b border-white/10 last:border-0"
                 >
                   <span className="text-sm text-gray-400">{item.label}</span>
-                  <span
-                    className={`font-bold ${
-                      item.type === 'positive'
-                        ? 'text-success'
-                        : item.type === 'negative'
-                        ? 'text-danger'
-                        : 'text-secondary'
-                    }`}
-                  >
+                  <span className="font-bold" style={{ color: getValueColor(item.type) }}>
                     {formatValue(item.value)}
                   </span>
                 </div>

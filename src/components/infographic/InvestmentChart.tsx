@@ -2,6 +2,7 @@
 
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import { usePalette } from './PaletteProvider'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -18,6 +19,7 @@ export function InvestmentChart({
   contingency,
   renovation,
 }: InvestmentChartProps) {
+  const palette = usePalette()
   const total = equipment + additional + contingency + renovation
 
   const data = {
@@ -25,7 +27,7 @@ export function InvestmentChart({
     datasets: [
       {
         data: [equipment, additional, contingency, renovation],
-        backgroundColor: ['#e94560', '#16213e', '#f39c12', '#4ecdc4'],
+        backgroundColor: [palette.primary, palette.backgroundLight, '#f39c12', palette.secondary],
         borderWidth: 0,
       },
     ],
@@ -46,10 +48,10 @@ export function InvestmentChart({
   }
 
   const items = [
-    { name: 'ציוד מקצועי', amount: equipment, color: 'bg-primary' },
-    { name: 'הוצאות נוספות', amount: additional, color: 'bg-background-light' },
-    { name: 'שיפוץ ובינוי', amount: renovation, color: 'bg-secondary' },
-    { name: 'בלתי מתוכנן', amount: contingency, color: 'bg-warning' },
+    { name: 'ציוד מקצועי', amount: equipment, color: palette.primary },
+    { name: 'הוצאות נוספות', amount: additional, color: palette.backgroundLight },
+    { name: 'שיפוץ ובינוי', amount: renovation, color: palette.secondary },
+    { name: 'בלתי מתוכנן', amount: contingency, color: '#f39c12' },
   ]
 
   return (
@@ -69,8 +71,8 @@ export function InvestmentChart({
             </div>
             <div className="h-6 bg-white/10 rounded-full overflow-hidden">
               <div
-                className={`h-full ${item.color} rounded-full flex items-center justify-center text-xs font-bold`}
-                style={{ width: `${(item.amount / total) * 100}%` }}
+                className="h-full rounded-full flex items-center justify-center text-xs font-bold"
+                style={{ width: `${(item.amount / total) * 100}%`, backgroundColor: item.color }}
               >
                 {((item.amount / total) * 100).toFixed(1)}%
               </div>
