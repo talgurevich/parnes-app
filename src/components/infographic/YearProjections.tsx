@@ -14,28 +14,28 @@ export function YearProjections({ year1, year2, kpis }: YearProjectionsProps) {
     {
       title: 'שנה ראשונה',
       data: [
-        { label: 'הכנסות שנתיות', value: year1.revenue || 482074, type: 'neutral' },
-        { label: 'הוצאות שנתיות', value: year1.expenses || 451654, type: 'negative' },
-        { label: 'לקוחות (התחלה → סוף)', value: `${year1.customersStart || 33} → ${year1.customersEnd || 73}`, type: 'neutral' },
-        { label: 'רווח תפעולי', value: year1.operatingProfit || -43117, type: 'negative' },
-        { label: 'יתרת סגירה', value: year1.closingBalance || 4897, type: 'positive' },
+        { label: 'הכנסות שנתיות', value: year1.revenue || 0, type: 'neutral' },
+        { label: 'הוצאות שנתיות', value: year1.expenses || 0, type: 'negative' },
+        { label: 'לקוחות (התחלה → סוף)', value: `${year1.customersStart || 0} → ${year1.customersEnd || 0}`, type: 'neutral' },
+        { label: 'רווח תפעולי', value: year1.operatingProfit || 0, type: 'negative' },
+        { label: 'יתרת סגירה', value: year1.closingBalance || 0, type: 'positive' },
       ],
     },
     {
       title: 'שנה שניה',
       data: [
-        { label: 'הכנסות שנתיות', value: year2.revenue || 901740, type: 'neutral' },
-        { label: 'לקוחות (התחלה → סוף)', value: `${year2.customersStart || 76} → ${year2.customersEnd || 109}`, type: 'neutral' },
-        { label: 'רווח (שכר + יתרה)', value: kpis.year2Profit || 170523, type: 'positive' },
-        { label: 'יתרת השקעה להחזר', value: 129130, type: 'neutral' },
+        { label: 'הכנסות שנתיות', value: year2.revenue || 0, type: 'neutral' },
+        { label: 'לקוחות (התחלה → סוף)', value: `${year2.customersStart || 0} → ${year2.customersEnd || 0}`, type: 'neutral' },
+        { label: 'רווח (שכר + יתרה)', value: kpis.year2Profit || 0, type: 'positive' },
+        { label: 'יתרת השקעה להחזר', value: 0, type: 'neutral' },
       ],
     },
     {
       title: 'שנה שלישית (צפי)',
       data: [
-        { label: 'רווח צפוי', value: kpis.year3Profit || 247590, type: 'positive' },
-        { label: 'רווח חודשי ממוצע', value: 20632, type: 'positive' },
-        { label: 'ROI מלא', value: `${kpis.roiYears || 2.52} שנים`, type: 'neutral' },
+        { label: 'רווח צפוי', value: kpis.year3Profit || 0, type: 'positive' },
+        { label: 'רווח חודשי ממוצע', value: 0, type: 'positive' },
+        { label: 'ROI מלא', value: `${kpis.roiYears || 0} שנים`, type: 'neutral' },
       ],
     },
   ]

@@ -9,14 +9,13 @@ interface ExpensesListProps {
 export function ExpensesList({ expenses }: ExpensesListProps) {
   const palette = usePalette()
   const items = [
-    { name: 'שכירות (₪120/מ"ר)', amount: expenses.rent || 10800 },
-    { name: 'שיווק ופרסום', amount: 6500 },
-    { name: 'חשמל', amount: 2000 },
-    { name: 'דמי ניהול', amount: expenses.management || 1440 },
-    { name: 'ארנונה', amount: expenses.propertyTax || 1350 },
-    { name: 'מערכת ניהול', amount: expenses.managementSystem || 1100 },
-    { name: 'הנה"ח וראיית חשבון', amount: 885 },
-    { name: 'ביטוח', amount: expenses.insurance || 700 },
+    { name: 'שכירות', amount: expenses.rent || 0 },
+    { name: 'דמי ניהול', amount: expenses.management || 0 },
+    { name: 'ארנונה', amount: expenses.propertyTax || 0 },
+    { name: 'מערכת ניהול', amount: expenses.managementSystem || 0 },
+    { name: 'ביטוח', amount: expenses.insurance || 0 },
+    { name: 'מאמני קבוצות', amount: expenses.groupTrainers || 0 },
+    { name: 'מאמנים אישיים', amount: expenses.personalTrainers || 0 },
   ]
 
   const total = items.reduce((sum, item) => sum + item.amount, 0)

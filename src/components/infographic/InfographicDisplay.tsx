@@ -78,28 +78,28 @@ export function InfographicDisplay({
 
         {/* Key Metrics */}
         <KeyMetrics
-          totalInvestment={Number(investments.total) || 236500}
-          spaceGross={Number(businessInfo.spaceGross) || 90}
-          maxCapacity={58}
-          monthsToBreakeven={Number(kpis.breakEvenMonths) || 12}
-          roiYears={Number(kpis.roiYears) || 2.52}
-          averagePrice={Number(pricing.averagePrice) || 607}
+          totalInvestment={Number(investments.total) || 0}
+          spaceGross={Number(businessInfo.spaceGross) || 0}
+          maxCapacity={0}
+          monthsToBreakeven={Number(kpis.breakEvenMonths) || 0}
+          roiYears={Number(kpis.roiYears) || 0}
+          averagePrice={Number(pricing.averagePrice) || 0}
         />
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Investment Chart */}
           <InvestmentChart
-            equipment={Number(investments.equipment) || 110000}
-            additional={Number(investments.additional) || 71500}
-            contingency={Number(investments.contingency) || 30000}
-            renovation={Number(investments.renovation) || 25000}
+            equipment={Number(investments.equipment) || 0}
+            additional={Number(investments.additional) || 0}
+            contingency={Number(investments.contingency) || 0}
+            renovation={Number(investments.renovation) || 0}
           />
 
           {/* Pricing Table */}
           <PricingTable
             plans={Array.isArray(pricing.plans) ? pricing.plans : []}
-            personalTraining={Number(pricing.personalTraining) || 220}
-            clinicTreatment={Number(pricing.clinicTreatment) || 350}
+            personalTraining={Number(pricing.personalTraining) || 0}
+            clinicTreatment={Number(pricing.clinicTreatment) || 0}
           />
 
           {/* Expenses */}
