@@ -209,66 +209,70 @@ function extractKPIs(sheet: XLSX.WorkSheet) {
   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
   return {
-    totalInvestment: parseNumber(getCellValue(json, 3, 3)) || 0,
-    breakEvenCustomers: parseNumber(getCellValue(json, 4, 3)) || 0,
-    breakEvenMonths: parseNumber(getCellValue(json, 6, 3)) || 0,
-    roiYears: parseNumber(getCellValue(json, 14, 3)) || 0,
-    year1Profit: parseNumber(getCellValue(json, 8, 3)) || 0,
-    year2Profit: parseNumber(getCellValue(json, 9, 3)) || 0,
-    year3Profit: parseNumber(getCellValue(json, 12, 3)) || 0,
+    totalInvestment: parseNumber(getCellValue(json, 1, 2)) || 0,
+    breakEvenCustomers: parseNumber(getCellValue(json, 3, 2)) || 0,
+    breakEvenMonths: parseNumber(getCellValue(json, 5, 2)) || 0,
+    roiYears: parseNumber(getCellValue(json, 9, 2)) || 0,
+    year1Profit: parseNumber(getCellValue(json, 6, 2)) || 0,
+    year2Profit: parseNumber(getCellValue(json, 7, 2)) || 0,
+    year3Profit: parseNumber(getCellValue(json, 8, 2)) || 0,
   }
 }
 
 function extractSignificantParams(sheet: XLSX.WorkSheet) {
   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
+  // Get year 3 profit to calculate monthly
+  const year3Profit = parseNumber(getCellValue(json, 8, 2)) || 0
+  const year3MonthlyProfit = year3Profit > 0 ? Math.round(year3Profit / 12) : 0
+
   return [
     {
       name: 'גיוס לקוחות פריסייל',
-      value: parseNumber(getCellValue(json, 3, 9)) || 0,
-      note: '',
+      value: parseNumber(getCellValue(json, 1, 7)) || 0,
+      note: String(getCellValue(json, 1, 8) || ''),
       color: 'gray',
     },
     {
       name: 'קצב צמיחה MoM שנה ראשונה',
-      value: parseNumber(getCellValue(json, 4, 9)) || 0,
-      note: '',
+      value: parseNumber(getCellValue(json, 2, 7)) || 0,
+      note: String(getCellValue(json, 2, 8) || ''),
       color: 'gray',
     },
     {
       name: 'ממוצע חודשי שעות אימון בעלים',
-      value: parseNumber(getCellValue(json, 6, 9)) || 0,
-      note: '',
+      value: parseNumber(getCellValue(json, 4, 7)) || 0,
+      note: String(getCellValue(json, 4, 8) || ''),
       color: 'gray',
     },
     {
       name: 'שכירות למ"ר (כולל ניהול)',
-      value: parseNumber(getCellValue(json, 7, 9)) || 0,
-      note: '',
+      value: parseNumber(getCellValue(json, 5, 7)) || 0,
+      note: String(getCellValue(json, 5, 8) || ''),
       color: 'gray',
     },
     {
-      name: 'תקציב ומימון',
-      value: parseNumber(getCellValue(json, 8, 9)) || 0,
+      name: 'תקציב לפרויקט',
+      value: parseNumber(getCellValue(json, 13, 2)) || 0,
       note: '',
       color: 'gray',
     },
     {
       name: 'רווח חודשי ממוצע (2 שנים)',
-      value: parseNumber(getCellValue(json, 9, 9)) || 0,
-      note: '',
+      value: parseNumber(getCellValue(json, 7, 7)) || 0,
+      note: String(getCellValue(json, 7, 8) || ''),
       color: 'gray',
     },
     {
       name: 'צפי רווח חודשי - שנה שלישית',
-      value: parseNumber(getCellValue(json, 10, 9)) || 0,
+      value: year3MonthlyProfit,
       note: '',
       color: 'gray',
     },
     {
       name: 'צפי ל-ROI מלא',
-      value: parseNumber(getCellValue(json, 12, 9)) || 0,
-      note: '',
+      value: parseNumber(getCellValue(json, 9, 2)) || 0,
+      note: 'שנים',
       color: 'gray',
     },
   ]
