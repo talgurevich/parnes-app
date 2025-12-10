@@ -112,8 +112,8 @@ function extractBusinessInfo(sheet: XLSX.WorkSheet) {
     openingDate: getCellValue(json, 8, 4) || null,
     legalEntity: getCellValue(json, 10, 4) || '',
     concept: getCellValue(json, 12, 3) || '',
-    spaceGross: parseNumber(getCellValue(json, 6, 18)) || 0,
-    spaceNet: parseNumber(getCellValue(json, 7, 18)) || 0,
+    spaceGross: parseInteger(getCellValue(json, 6, 18)) || 0,
+    spaceNet: parseInteger(getCellValue(json, 7, 18)) || 0,
   }
 }
 
@@ -125,16 +125,16 @@ function extractPricing(sheet: XLSX.WorkSheet) {
 
   for (const row of rows) {
     const name = getCellValue(json, row, 1)
-    const sessions = parseNumber(getCellValue(json, row, 4))
-    const price = parseNumber(getCellValue(json, row, 5))
-    const percentage = parseNumber(getCellValue(json, row, 7))
+    const sessions = parseInteger(getCellValue(json, row, 4))
+    const price = parseInteger(getCellValue(json, row, 5))
+    const percentage = parseNumber(getCellValue(json, row, 7), 1)
 
     if (name && price) {
       plans.push({
         name,
         sessionsPerMonth: sessions || 0,
         price,
-        pricePerSession: sessions ? price / sessions : 0,
+        pricePerSession: sessions ? Math.round(price / sessions) : 0,
         customerPercentage: percentage || 0,
       })
     }
@@ -142,9 +142,9 @@ function extractPricing(sheet: XLSX.WorkSheet) {
 
   return {
     plans,
-    averagePrice: parseNumber(getCellValue(json, 26, 5)) || 0,
-    personalTraining: parseNumber(getCellValue(json, 42, 5)) || 0,
-    clinicTreatment: parseNumber(getCellValue(json, 49, 5)) || 0,
+    averagePrice: parseNumber(getCellValue(json, 26, 5), 1) || 0,
+    personalTraining: parseInteger(getCellValue(json, 42, 5)) || 0,
+    clinicTreatment: parseInteger(getCellValue(json, 49, 5)) || 0,
   }
 }
 
@@ -152,13 +152,13 @@ function extractExpenses(sheet: XLSX.WorkSheet) {
   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
   return {
-    rent: parseNumber(getCellValue(json, 55, 6)) || 0,
-    management: parseNumber(getCellValue(json, 56, 6)) || 0,
-    propertyTax: parseNumber(getCellValue(json, 57, 6)) || 0,
-    groupTrainers: parseNumber(getCellValue(json, 58, 6)) || 0,
-    personalTrainers: parseNumber(getCellValue(json, 59, 6)) || 0,
-    managementSystem: parseNumber(getCellValue(json, 61, 6)) || 0,
-    insurance: parseNumber(getCellValue(json, 62, 6)) || 0,
+    rent: parseInteger(getCellValue(json, 55, 6)) || 0,
+    management: parseInteger(getCellValue(json, 56, 6)) || 0,
+    propertyTax: parseInteger(getCellValue(json, 57, 6)) || 0,
+    groupTrainers: parseInteger(getCellValue(json, 58, 6)) || 0,
+    personalTrainers: parseInteger(getCellValue(json, 59, 6)) || 0,
+    managementSystem: parseInteger(getCellValue(json, 61, 6)) || 0,
+    insurance: parseInteger(getCellValue(json, 62, 6)) || 0,
   }
 }
 
@@ -167,12 +167,12 @@ function extractYearData(sheet: XLSX.WorkSheet, year: number) {
 
   return {
     year,
-    revenue: parseNumber(getCellValue(json, 12, 29)) || 0,
-    expenses: parseNumber(getCellValue(json, 38, 29)) || 0,
-    operatingProfit: parseNumber(getCellValue(json, 39, 29)) || 0,
-    customersStart: parseNumber(getCellValue(json, 5, 4)) || 0,
-    customersEnd: parseNumber(getCellValue(json, 5, 26)) || 0,
-    closingBalance: parseNumber(getCellValue(json, 62, 26)) || 0,
+    revenue: parseInteger(getCellValue(json, 12, 29)) || 0,
+    expenses: parseInteger(getCellValue(json, 38, 29)) || 0,
+    operatingProfit: parseInteger(getCellValue(json, 39, 29)) || 0,
+    customersStart: parseInteger(getCellValue(json, 5, 4)) || 0,
+    customersEnd: parseInteger(getCellValue(json, 5, 26)) || 0,
+    closingBalance: parseInteger(getCellValue(json, 62, 26)) || 0,
   }
 }
 
@@ -184,9 +184,9 @@ function extractMonthlyData(sheet: XLSX.WorkSheet) {
     const col = 4 + i * 2
     months.push({
       month: i + 1,
-      customers: parseNumber(getCellValue(json, 5, col)) || 0,
-      revenueSubscription: parseNumber(getCellValue(json, 10, col)) || 0,
-      revenuePersonal: parseNumber(getCellValue(json, 9, col)) || 0,
+      customers: parseInteger(getCellValue(json, 5, col)) || 0,
+      revenueSubscription: parseInteger(getCellValue(json, 10, col)) || 0,
+      revenuePersonal: parseInteger(getCellValue(json, 9, col)) || 0,
     })
   }
 
@@ -197,11 +197,11 @@ function extractInvestments(sheet: XLSX.WorkSheet) {
   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
   return {
-    equipment: parseNumber(getCellValue(json, 18, 17)) || 0,
-    renovation: parseNumber(getCellValue(json, 13, 17)) || 0,
-    additional: parseNumber(getCellValue(json, 30, 17)) || 0,
-    contingency: parseNumber(getCellValue(json, 42, 17)) || 0,
-    total: parseNumber(getCellValue(json, 44, 17)) || 0,
+    equipment: parseInteger(getCellValue(json, 18, 17)) || 0,
+    renovation: parseInteger(getCellValue(json, 13, 17)) || 0,
+    additional: parseInteger(getCellValue(json, 30, 17)) || 0,
+    contingency: parseInteger(getCellValue(json, 42, 17)) || 0,
+    total: parseInteger(getCellValue(json, 44, 17)) || 0,
   }
 }
 
@@ -209,13 +209,13 @@ function extractKPIs(sheet: XLSX.WorkSheet) {
   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
   return {
-    totalInvestment: parseNumber(getCellValue(json, 1, 2)) || 0,
-    breakEvenCustomers: parseNumber(getCellValue(json, 3, 2)) || 0,
-    breakEvenMonths: parseNumber(getCellValue(json, 5, 2)) || 0,
-    roiYears: parseNumber(getCellValue(json, 9, 2)) || 0,
-    year1Profit: parseNumber(getCellValue(json, 6, 2)) || 0,
-    year2Profit: parseNumber(getCellValue(json, 7, 2)) || 0,
-    year3Profit: parseNumber(getCellValue(json, 8, 2)) || 0,
+    totalInvestment: parseInteger(getCellValue(json, 1, 2)) || 0,
+    breakEvenCustomers: parseInteger(getCellValue(json, 3, 2)) || 0,
+    breakEvenMonths: parseInteger(getCellValue(json, 5, 2)) || 0,
+    roiYears: parseNumber(getCellValue(json, 9, 2), 2) || 0,
+    year1Profit: parseInteger(getCellValue(json, 6, 2)) || 0,
+    year2Profit: parseInteger(getCellValue(json, 7, 2)) || 0,
+    year3Profit: parseInteger(getCellValue(json, 8, 2)) || 0,
   }
 }
 
@@ -223,43 +223,43 @@ function extractSignificantParams(sheet: XLSX.WorkSheet) {
   const json = XLSX.utils.sheet_to_json(sheet, { header: 1 }) as unknown[][]
 
   // Get year 3 profit to calculate monthly
-  const year3Profit = parseNumber(getCellValue(json, 8, 2)) || 0
+  const year3Profit = parseInteger(getCellValue(json, 8, 2)) || 0
   const year3MonthlyProfit = year3Profit > 0 ? Math.round(year3Profit / 12) : 0
 
   return [
     {
       name: 'גיוס לקוחות פריסייל',
-      value: parseNumber(getCellValue(json, 1, 7)) || 0,
+      value: parseInteger(getCellValue(json, 1, 7)) || 0,
       note: String(getCellValue(json, 1, 8) || ''),
       color: 'gray',
     },
     {
       name: 'קצב צמיחה MoM שנה ראשונה',
-      value: parseNumber(getCellValue(json, 2, 7)) || 0,
+      value: parseNumber(getCellValue(json, 2, 7), 1) || 0,
       note: String(getCellValue(json, 2, 8) || ''),
       color: 'gray',
     },
     {
       name: 'ממוצע חודשי שעות אימון בעלים',
-      value: parseNumber(getCellValue(json, 4, 7)) || 0,
+      value: parseInteger(getCellValue(json, 4, 7)) || 0,
       note: String(getCellValue(json, 4, 8) || ''),
       color: 'gray',
     },
     {
       name: 'שכירות למ"ר (כולל ניהול)',
-      value: parseNumber(getCellValue(json, 5, 7)) || 0,
+      value: parseInteger(getCellValue(json, 5, 7)) || 0,
       note: String(getCellValue(json, 5, 8) || ''),
       color: 'gray',
     },
     {
       name: 'תקציב לפרויקט',
-      value: parseNumber(getCellValue(json, 13, 2)) || 0,
+      value: parseInteger(getCellValue(json, 13, 2)) || 0,
       note: '',
       color: 'gray',
     },
     {
       name: 'רווח חודשי ממוצע (2 שנים)',
-      value: parseNumber(getCellValue(json, 7, 7)) || 0,
+      value: parseInteger(getCellValue(json, 7, 7)) || 0,
       note: String(getCellValue(json, 7, 8) || ''),
       color: 'gray',
     },
@@ -271,7 +271,7 @@ function extractSignificantParams(sheet: XLSX.WorkSheet) {
     },
     {
       name: 'צפי ל-ROI מלא',
-      value: parseNumber(getCellValue(json, 9, 2)) || 0,
+      value: parseNumber(getCellValue(json, 9, 2), 2) || 0,
       note: 'שנים',
       color: 'gray',
     },
@@ -285,12 +285,24 @@ function getCellValue(json: unknown[][], row: number, col: number): string | num
   return null
 }
 
-function parseNumber(value: unknown): number | null {
+function parseNumber(value: unknown, decimals?: number): number | null {
   if (value === null || value === undefined) return null
-  if (typeof value === 'number') return value
-  if (typeof value === 'string') {
-    const num = parseFloat(value.replace(/[^0-9.-]/g, ''))
-    return isNaN(num) ? null : num
+  let num: number
+  if (typeof value === 'number') {
+    num = value
+  } else if (typeof value === 'string') {
+    num = parseFloat(value.replace(/[^0-9.-]/g, ''))
+    if (isNaN(num)) return null
+  } else {
+    return null
   }
-  return null
+  if (decimals !== undefined) {
+    return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals)
+  }
+  return num
+}
+
+function parseInteger(value: unknown): number | null {
+  const num = parseNumber(value)
+  return num !== null ? Math.round(num) : null
 }
