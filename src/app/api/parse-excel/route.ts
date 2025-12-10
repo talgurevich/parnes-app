@@ -34,6 +34,9 @@ export async function POST(request: NextRequest) {
     // Extract data from each sheet
     const parsedData = parseBusinessPlan(workbook)
 
+    // Delete existing data for this project before inserting new data
+    await supabase.from('project_data').delete().eq('project_id', projectId)
+
     // Store parsed data
     for (const [dataType, data] of Object.entries(parsedData)) {
       await supabase.from('project_data').insert({
